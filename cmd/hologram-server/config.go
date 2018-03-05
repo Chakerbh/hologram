@@ -20,6 +20,7 @@ type LDAP struct {
 		Password string `json:"password"`
 	} `json:"bind"`
 	UserAttr     string `json:"userattr"`
+	sshAttr      string `json:"sshattr"`
 	BaseDN       string `json:"basedn"`
 	Host         string `json:"host"`
 	InsecureLDAP bool   `json:"insecureldap"`

@@ -161,6 +161,10 @@ func main() {
 		config.LDAP.UserAttr = "cn"
 	}
 
+	if config.LDAP.sshAttr == "" {
+		config.LDAP.sshAttr = "sshPublicKey"
+	}
+
 	if config.Stats == "" {
 		log.Debug("No statsd server specified; no metrics will be emitted by this program.")
 		stats = g2s.Noop()
@@ -185,7 +189,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	ldapCache, err := server.NewLDAPUserCache(ldapServer, stats, config.LDAP.UserAttr, config.LDAP.BaseDN,
+	ldapCache, err := server.NewLDAPUserCache(ldapServer, stats, config.LDAP.UserAttr, config.LDAP.sshAttr, config.LDAP.BaseDN,
 		config.LDAP.EnableLDAPRoles, config.LDAP.RoleAttribute, config.AWS.DefaultRole, config.LDAP.DefaultRoleAttr)
 	if err != nil {
 		log.Errorf("Top-level error in LDAPUserCache layer: %s", err.Error())
@@ -193,7 +197,7 @@ func main() {
 	}
 
 	serverHandler := server.New(ldapCache, credentialsService, config.AWS.DefaultRole, stats, ldapServer,
-		config.LDAP.UserAttr, config.LDAP.BaseDN, config.LDAP.EnableLDAPRoles, config.LDAP.DefaultRoleAttr)
+		config.LDAP.UserAttr, config.LDAP.sshAttr, config.LDAP.BaseDN, config.LDAP.EnableLDAPRoles, config.LDAP.DefaultRoleAttr)
 	server, err := remote.NewServer(config.Listen, serverHandler.HandleConnection)
 
 	// Wait for a signal from the OS to shutdown.

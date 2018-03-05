@@ -6,6 +6,7 @@
       "password": "LDAPServerPa$$word"
     },
     "userattr": "cn",
+    "sshattr": "sshPublicKey",
     "basedn": "dc=domain,dc=local",
     "enableldaproles": false,
     "roleattr": "businessCategory"
